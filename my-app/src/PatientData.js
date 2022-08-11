@@ -57,6 +57,9 @@ export class PatientData extends Component {
 
     this.setState({ Patient: sortedData });
   }
+  showNote(pt){
+    swal(`${pt}`, { icon: "info" });
+  }
   refreshList() {
     fetch(variables.API_URL + "patientnewdata")
       .then((response) => response.json())
@@ -287,7 +290,7 @@ export class PatientData extends Component {
               <th>Gender</th>
               <th>DOB</th>
               <th>Hospital Name</th>
-              <th>Updated By</th>
+              {/* <th>Updated By</th> */}
               <th>NoteID</th>
               <th>Note Summary</th>
               <th>Options</th>
@@ -302,9 +305,10 @@ export class PatientData extends Component {
                 <td>{pt.Gender}</td>
                 <td>{pt.DOB}</td>
                 <td>{pt.HospitalName}</td>
-                <td>{pt.LastUpdatedBy}</td>
+                {/* <td>{pt.LastUpdatedBy}</td> */}
                 <td>{pt.NoteId}</td>
-                <td>{pt.Prescription}</td>
+                {/* {pt.Prescription} */}
+                <td><button onClick={() =>this.showNote(pt.Prescription)}>Show Note</button></td>
                 <td>
                   <button
                     type="button"

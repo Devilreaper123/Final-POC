@@ -76,7 +76,6 @@ class UploadCsvFileView(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
             file = serializer.validated_data['file']
             reader = pd.read_csv(file)
-            username = request.user.username
             for _, row in reader.iterrows():
                 gender = row[3].upper()
                 new_file = PatientData.objects.create(
@@ -85,7 +84,7 @@ class UploadCsvFileView(generics.CreateAPIView):
                     Gender=gender,
                     DOB=row[4],
                     HospitalName=row[5],
-                    LastUpdatedBy=str(username),
+                    LastUpdatedBy=str(request.user),
                     NoteId=row[7],
                     Prescription=row[8],
                 )
@@ -109,14 +108,14 @@ class UploadJsonFileView(generics.CreateAPIView):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             file = serializer.validated_data['file']
-            reader = pd.read_json(file, typ='series')
+            reader = pd.read_json(file, typ='series',encoding="utf8")
             new_file = PatientData.objects.create(
                 PatientId=reader['patient_id'],
                 PatientName=reader['patient_name'],
                 Gender=reader['gender'].upper(),
                 DOB=reader['dob'],
                 HospitalName=reader['hospital_name'],
-                LastUpdatedBy=str(request.user.username),
+                LastUpdatedBy=str(request.user),
                 NoteId=reader['note_id'],
                 Prescription=reader['text'],
             )
