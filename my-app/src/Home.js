@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "./Home.css";
+import swal from "sweetalert";
 export class Home extends Component {
   state = {
     file: null,
@@ -34,10 +35,16 @@ export class Home extends Component {
           },
         })
         .then((res) => {
+          swal("Multiple Patient Medical Notes has been added successfully", {
+            icon: "success",
+          });
           console.log(res.data);
         })
         .catch((err) => console.log(err));
     } catch (error) {
+      swal("An Error occured", {
+        icon: "error",
+      });
       console.log("An Error occured", error);
     }
   };
@@ -58,10 +65,16 @@ export class Home extends Component {
         },
       })
         .then((res) => {
+          swal("Single Patient Medical Note has been added successfully", {
+            icon: "success",
+          });
           console.log(res.data);
         })
         .catch((err) => console.log(err));
     } catch (error) {
+      swal("An Error occured", {
+        icon: "error",
+      });
       console.log("An Error occured", error);
     }
   };
@@ -69,53 +82,42 @@ export class Home extends Component {
     return (
       <div className="App">
         <br />
-        <br />
-        <br />
-        <form encType="multipart/form-data" onSubmit={this.handleCsvSubmit}>
-          <div class="p-3 mb-2 bg-primary text-white">
-            <p>
-              Please upload a .csv file here for adding multiple patients
-              <br />
-              <div class="input-group mb-3">
-                <input
-                  type="file"
-                  class="form-control"
-                  id="inputGroupFile02"
-                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  onChange={this.handleCsvChange}
-                />
-                <label class="input-group-text" for="inputGroupFile02">
-                  Upload
-                </label>
+            <td>
+            <p className="json">For Adding a Medical note for a Single patient</p>
+            <form onSubmit={this.handleJsonSubmit}>
+              <div  className="p-3 mb-2 bg-success text-white">
+              Only files with a .Json extensions are accepted<br/>
+                  <div className="input-group mb-3">
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="inputGroupFile02"
+                      accept="application/JSON"
+                      onChange={this.handleJsonChange}
+                    />
+                  </div>
               </div>
-            </p>
-          </div>
-          <input type="submit" />
-        </form>
-        <br />
-        <br />
-        <br />
-        <form onSubmit={this.handleJsonSubmit}>
-          <div class="p-3 mb-2 bg-success text-white">
-            <p>
-              Please upload a .json file here for adding a single patient
-              <br />
-              <div class="input-group mb-3">
-                <input
-                  type="file"
-                  class="form-control"
-                  id="inputGroupFile02"
-                  accept="application/JSON"
-                  onChange={this.handleJsonChange}
-                />
-                <label class="input-group-text" for="inputGroupFile02">
-                  Upload
-                </label>
+              <input type="submit" />
+            </form>
+            </td>
+            <td>
+            <p className="csv">For Adding a Medical note for Multiple patient</p>
+            <form encType="multipart/form-data" onSubmit={this.handleCsvSubmit}>
+              <div className="p-3 mb-2 bg-primary text-white">
+              Only files with a .Csv extensions are accepted<br/>
+                  <div className="input-group mb-3">
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="inputGroupFile02"
+                      accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      onChange={this.handleCsvChange}
+                    />
+                  </div>
               </div>
-            </p>
-          </div>
-          <input type="submit" />
-        </form>
+              <input type="submit" />
+            </form>
+            </td>
       </div>
     );
   }

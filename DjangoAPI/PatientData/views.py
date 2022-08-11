@@ -2,12 +2,11 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from .models import PatientData
-from .serializers import PatientNewDataSerializer, FileUploadSerializer, SaveFileSerializer
-from django.shortcuts import render
+from .serializers import PatientNewDataSerializer, FileUploadSerializer
 from rest_framework import generics
 import pandas as pd
 from rest_framework.response import Response
-
+from django.contrib.auth.models import User
 
 @csrf_exempt
 def patientDataApi(req, id=0):
@@ -19,6 +18,7 @@ def patientDataApi(req, id=0):
         if req.method == 'GET':
             patients = PatientData.objects.all()
             patients_serializer = PatientNewDataSerializer(patients, many=True)
+            print(req.user)
             return JsonResponse(patients_serializer.data, safe=False)
         elif req.method == 'POST':
             try:
@@ -53,7 +53,7 @@ def patientDataApi(req, id=0):
             except Exception as e:
                 return print("FAILED TO ADD:", e)
         elif req.method == 'DELETE':
-            department = PatientData.objects.get(PatientId=id)
+            department = PatientData.objects.get(MRN=id)
             department.delete()
             return JsonResponse("DELETED SUCCESSFULLY", safe=False)
     except Exception as e:
@@ -76,21 +76,21 @@ class UploadCsvFileView(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
             file = serializer.validated_data['file']
             reader = pd.read_csv(file)
+            username = request.user.username
             for _, row in reader.iterrows():
                 gender = row[3].upper()
-                user = row[6]
                 new_file = PatientData.objects.create(
                     PatientName=row[1],
-                    MRN=row[2],
+                    PatientId=row[2],
                     Gender=gender,
                     DOB=row[4],
                     HospitalName=row[5],
-                    LastUpdatedBy=user,
+                    LastUpdatedBy=str(username),
                     NoteId=row[7],
                     Prescription=row[8],
                 )
                 new_file.save()
-            return Response({"status": "success"})
+            return JsonResponse("status",safe=False)
         except Exception as e:
             return print("Failed to load .CSV file :", e)
 
@@ -101,7 +101,6 @@ class UploadJsonFileView(generics.CreateAPIView):
     # and populating the Database with its Data.
 
     serializer_class = FileUploadSerializer
-
     def post(self, request):
         # The Function populates the database by reading the .Json file and
         # creating an instance of the Patient by filling the data matching to its
@@ -112,12 +111,12 @@ class UploadJsonFileView(generics.CreateAPIView):
             file = serializer.validated_data['file']
             reader = pd.read_json(file, typ='series')
             new_file = PatientData.objects.create(
+                PatientId=reader['patient_id'],
                 PatientName=reader['patient_name'],
-                MRN=reader['mrn'],
                 Gender=reader['gender'].upper(),
                 DOB=reader['dob'],
                 HospitalName=reader['hospital_name'],
-                LastUpdatedBy=reader['last_updated_by'],
+                LastUpdatedBy=str(request.user.username),
                 NoteId=reader['note_id'],
                 Prescription=reader['text'],
             )

@@ -10,7 +10,7 @@ const App = () => {
         <h3 className="d-flex justify-content-center m-3">
           Medical Notes Management
         </h3>
-        <nav className="navbar navbar-expand-sm bg-light navbar-dark">
+        <nav className="navbar navbar-expand bg-green navbar-dark">
           <ul className="navbar-nav">
             <li className="nav-item- m-1">
               <NavLink className="btn btn-light btn-outline-primary" to="/home">

@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import { variables } from "./Variables.js";
 import ReactPaginate from "react-paginate";
+import './PatientHome.css'
+import swal from "sweetalert";
 export class PatientData extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      PatientId: 0,
+      PatientId: "",
       PatientName: "",
       Patient: [],
-      MRN: "",
+      MRN: 0,
       Gender: "",
       DOB: "",
       HospitalName: "",
@@ -16,20 +18,20 @@ export class PatientData extends Component {
       NoteId: "",
       NoteDateTime: "",
       Prescription: "",
-      PatientIdFilter: "",
+      MRNFilter: "",
       PatientNameFilter: "",
       PatientWithoutFilter: [],
     };
   }
   FilterFn() {
-    var PatientIdFilter = this.state.PatientIdFilter;
+    var MRNFilter = this.state.MRNFilter;
     var PatientNameFilter = this.state.PatientNameFilter;
     var filteredData = this.state.PatientWithoutFilter.filter(function(el) {
       return (
-        el.PatientId.toString()
+        el.MRN.toString()
           .toLowerCase()
           .includes(
-            PatientIdFilter.toString()
+            MRNFilter.toString()
               .trim()
               .toLowerCase()
           ) &&
@@ -65,8 +67,8 @@ export class PatientData extends Component {
   componentDidMount() {
     this.refreshList();
   }
-  changePatientIdFilter = (e) => {
-    this.state.PatientIdFilter = e.target.value;
+  changeMRNFilter = (e) => {
+    this.state.MRNFilter = e.target.value;
     this.FilterFn();
   };
   changePatientNameFilter = (e) => {
@@ -141,34 +143,40 @@ export class PatientData extends Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          alert(result);
+          swal("The Patient's Medical Note has been Edited Successfully!!!", {
+            icon: "success",
+          });
           this.refreshList();
         },
         (error) => {
-          alert("Failed");
+          swal("The Patient's Medical record was Edited", { icon: "error" });
         }
       );
   }
   deleteClick(id) {
-    if (window.confirm("Are you sure?")) {
-      fetch(variables.API_URL + "patientnewdata/" + id, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then(
-          (result) => {
-            alert(result);
-            this.refreshList();
+    swal({
+      title: "Are you sure you want to delete this Patient's Data??",
+      text: "Once deleted, you will not be able to recover this file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        fetch(variables.API_URL + "patientnewdata/" + id, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
-          (error) => {
-            alert("Failed");
-          }
-        );
-    }
+        });
+        swal("The Patient's Medical Note has been Deleted Successfully!!!", {
+          icon: "success",
+        });
+        this.refreshList();
+      } else {
+        swal("The Patient's Medical record was not deleted", { icon: "error" });
+      }
+    });
   }
   subSetArray(i) {
     console.log(i.selected);
@@ -183,74 +191,14 @@ export class PatientData extends Component {
       DOB,
       HospitalName,
       Prescription,
-      LastUpdatedBy,
     } = this.state;
 
     return (
-      <div>
-        <ReactPaginate
-          previousLabel={"previous"}
-          nextLabel={"next"}
-          pageCount={10}
-          breakLabel={"..."}
-          marginPagesDisplayed={3}
-          containerClassName={"pagination justify-content-center"}
-          pageClassName={"page-item"}
-          pageLinkClassName={"page-link"}
-          previousClassName={"page-item"}
-          previousLinkClassName={"page-link"}
-          nextClassName={"page-item"}
-          nextLinkClassName={"page-link"}
-          breakClassName={"page-item"}
-          onClick={this.subSetArray}
-          breakLinkClassName={"page-link"}
-          activeClassName={"active"}
-        />
+      <div className="main">
         <table className="table table-success table-striped">
           <thead>
             <tr>
-              <th>
-                <div className="d-flex flex-row">
-                  <input
-                    className="form-control m-2 form-control-sm"
-                    onChange={this.changePatientIdFilter}
-                    placeholder="Filter"
-                  />
-                </div>
-                ID
-                <button
-                  type="button"
-                  className="btn btn-light"
-                  onClick={() => this.sortResult("PatientId", true)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
-                    fill="currentColor"
-                    className="bi bi-arrow-down-square-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-light"
-                  onClick={() => this.sortResult("PatientId", false)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
-                    fill="currentColor"
-                    className="bi bi-arrow-up-square-fill"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
-                  </svg>
-                </button>
-              </th>
+              <th>PID</th>
               <th>
                 <div className="d-flex flex-row">
                   <input
@@ -259,7 +207,8 @@ export class PatientData extends Component {
                     placeholder="Filter"
                   />
                 </div>
-                Name
+                Patient Name
+                <br/>
                 <button
                   type="button"
                   className="btn btn-light"
@@ -267,8 +216,8 @@ export class PatientData extends Component {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
+                    width="16"
+                    height="16"
                     fill="currentColor"
                     className="bi bi-arrow-down-square-fill"
                     viewBox="0 0 16 16"
@@ -283,8 +232,8 @@ export class PatientData extends Component {
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="11"
-                    height="11"
+                    width="16"
+                    height="16"
                     fill="currentColor"
                     className="bi bi-arrow-up-square-fill"
                     viewBox="0 0 16 16"
@@ -293,11 +242,52 @@ export class PatientData extends Component {
                   </svg>
                 </button>
               </th>
-              <th>MRN</th>
+              <th>
+                <div className="d-flex flex-row">
+                  <input
+                    className="form-control m-2 form-control-sm"
+                    onChange={this.changeMRNFilter}
+                    placeholder="Filter"
+                  />
+                </div>MRN
+                <br/>
+                <button
+                  type="button"
+                  className="btn btn-light"
+                  onClick={() => this.sortResult("MRN", true)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-down-square-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5a.5.5 0 0 1 1 0z" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-light"
+                  onClick={() => this.sortResult("MRN", false)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-up-square-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
+                  </svg>
+                </button>
+              </th>
               <th>Gender</th>
               <th>DOB</th>
               <th>Hospital Name</th>
-              <th>Last Updated By</th>
+              <th>Updated By</th>
               <th>NoteID</th>
               <th>Note Summary</th>
               <th>Options</th>
@@ -305,10 +295,10 @@ export class PatientData extends Component {
           </thead>
           <tbody>
             {Patient.map((pt) => (
-              <tr key={pt.PatientId}>
-                <td>patientid_{pt.PatientId}</td>
+              <tr key={pt.MRN}>
+                <td>{pt.PatientId}</td>
                 <td>{pt.PatientName}</td>
-                <td>{pt.MRN}</td>
+                <td>mrn_{pt.MRN}</td>
                 <td>{pt.Gender}</td>
                 <td>{pt.DOB}</td>
                 <td>{pt.HospitalName}</td>
@@ -342,7 +332,7 @@ export class PatientData extends Component {
                   <button
                     type="button"
                     className="btn btn-light mr-1"
-                    onClick={() => this.deleteClick(pt.PatientId)}
+                    onClick={() => this.deleteClick(pt.MRN)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -422,15 +412,6 @@ export class PatientData extends Component {
                       />
                     </div>
                     <div className="input-group mb-3">
-                      <span className="input-group-text">Last Updated By</span>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={LastUpdatedBy}
-                        onChange={this.changeLastUpdatedBy}
-                      />
-                    </div>
-                    <div className="input-group mb-3">
                       <span className="input-group-text">Note Summary</span>
                       <input
                         type="text"
@@ -466,6 +447,27 @@ export class PatientData extends Component {
             </div>
           </div>
         </div>
+        <span>Total Patient records are {Patient.length}</span>
+        <br/>
+        <br/>
+        <ReactPaginate
+          previousLabel={"previous"}
+          nextLabel={"next"}
+          pageCount={10}
+          breakLabel={"..."}
+          marginPagesDisplayed={3}
+          containerClassName={"pagination justify-content-center"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextClassName={"page-item"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          onClick={this.subSetArray}
+          breakLinkClassName={"page-link"}
+          activeClassName={"active"}
+        />
       </div>
     );
   }
