@@ -159,7 +159,8 @@ export class PatientData extends Component {
   deleteClick(id) {
     swal({
       title: "Are you sure you want to delete this Patient's Data??",
-      text: "Once deleted, you will not be able to recover this Patients Medical Note!",
+      text:
+        "Once deleted, you will not be able to recover this Patients Medical Note!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -172,9 +173,12 @@ export class PatientData extends Component {
             "Content-Type": "application/json",
           },
         });
-        swal("The Patient's Medical Note has been Deleted Successfully!!!. Please Refresh the Page to see the Changes.", {
-          icon: "success",
-        });
+        swal(
+          "The Patient's Medical Note has been Deleted Successfully!!!. Please Refresh the Page to see the Changes.",
+          {
+            icon: "success",
+          }
+        );
         this.refreshList();
       } else {
         swal("The Patient's Medical record was not deleted", { icon: "error" });
