@@ -35,7 +35,7 @@ export class Home extends Component {
           },
         })
         .then((res) => {
-          swal("Multiple Patient Medical Notes has been added successfully", {
+          swal("Multiple Patient Medical Notes has been added successfully. Please view them in the Patient Data Section", {
             icon: "success",
           });
           console.log(res.data);
@@ -65,7 +65,7 @@ export class Home extends Component {
         },
       })
         .then((res) => {
-          swal("Single Patient Medical Note has been added successfully", {
+          swal("Single Patient Medical Note has been added successfully. Please view the data in the Patient Data Section", {
             icon: "success",
           });
           console.log(res.data);

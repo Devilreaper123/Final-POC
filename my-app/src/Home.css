@@ -2,6 +2,7 @@ body{
     background-image: url("test.jpg") ;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
 }
 input{
     width: 150px;
@@ -14,14 +15,14 @@ form{
 
 .json{
     text-transform: capitalize;
-    background-color: green;
+    background-color: lightseagreen;
     padding: 30px;
     color: aliceblue;
 }
 
 .csv{
     text-transform: capitalize;
-    background-color: blue;
+    background-color: lightskyblue;
     padding: 30px;
     color: aliceblue;
 }

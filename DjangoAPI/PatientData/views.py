@@ -18,7 +18,6 @@ def patientDataApi(req, id=0):
         if req.method == 'GET':
             patients = PatientData.objects.all()
             patients_serializer = PatientNewDataSerializer(patients, many=True)
-            print(req.user)
             return JsonResponse(patients_serializer.data, safe=False)
         elif req.method == 'POST':
             try:
@@ -34,7 +33,7 @@ def patientDataApi(req, id=0):
             try:
                 patient_data = JSONParser().parse(req)
                 patients = PatientData.objects.get(
-                    PatientId=patient_data['PatientId'])
+                    MRN=patient_data['MRN'])
                 department_serializer = PatientNewDataSerializer(
                     patients, data=patient_data)
                 if department_serializer.is_valid():
@@ -74,7 +73,7 @@ class UploadCsvFileView(generics.CreateAPIView):
                     Gender=gender,
                     DOB=row[4],
                     HospitalName=row[5],
-                    LastUpdatedBy=str(request.user),
+                    LastUpdatedBy=str("ronit"),
                     NoteId=row[7],
                     Prescription=row[8],
                 )
@@ -108,7 +107,7 @@ class UploadJsonFileView(generics.CreateAPIView):
                 Gender=reader['gender'].upper(),
                 DOB=reader['dob'],
                 HospitalName=reader['hospital_name'],
-                LastUpdatedBy=str(request.user),
+                LastUpdatedBy=str("ronit"),
                 NoteId=reader['note_id'],
                 Prescription=reader['text'],
             )

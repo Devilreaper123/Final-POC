@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { variables } from "./Variables.js";
 import ReactPaginate from "react-paginate";
-import './PatientHome.css'
+import "./PatientHome.css";
 import swal from "sweetalert";
 export class PatientData extends Component {
   constructor(props) {
@@ -57,7 +57,7 @@ export class PatientData extends Component {
 
     this.setState({ Patient: sortedData });
   }
-  showNote(pt){
+  showNote(pt) {
     swal(`${pt}`, { icon: "info" });
   }
   refreshList() {
@@ -201,7 +201,7 @@ export class PatientData extends Component {
         <table className="table table-success table-striped">
           <thead>
             <tr>
-              <th>PID</th>
+              <th>Patient ID</th>
               <th>
                 <div className="d-flex flex-row">
                   <input
@@ -210,8 +210,6 @@ export class PatientData extends Component {
                     placeholder="Filter"
                   />
                 </div>
-                Patient Name
-                <br/>
                 <button
                   type="button"
                   className="btn btn-light"
@@ -244,6 +242,9 @@ export class PatientData extends Component {
                     <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
                   </svg>
                 </button>
+                <br />
+                Patient Name
+                <br />
               </th>
               <th>
                 <div className="d-flex flex-row">
@@ -252,8 +253,7 @@ export class PatientData extends Component {
                     onChange={this.changeMRNFilter}
                     placeholder="Filter"
                   />
-                </div>MRN
-                <br/>
+                </div>
                 <button
                   type="button"
                   className="btn btn-light"
@@ -286,12 +286,13 @@ export class PatientData extends Component {
                     <path d="M2 16a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2zm6.5-4.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 1 0z" />
                   </svg>
                 </button>
+                <br />
+                MRN
               </th>
               <th>Gender</th>
               <th>DOB</th>
               <th>Hospital Name</th>
-              {/* <th>Updated By</th> */}
-              <th>NoteID</th>
+              <th>Updated By</th>
               <th>Note Summary</th>
               <th>Options</th>
             </tr>
@@ -305,10 +306,12 @@ export class PatientData extends Component {
                 <td>{pt.Gender}</td>
                 <td>{pt.DOB}</td>
                 <td>{pt.HospitalName}</td>
-                {/* <td>{pt.LastUpdatedBy}</td> */}
-                <td>{pt.NoteId}</td>
-                {/* {pt.Prescription} */}
-                <td><button onClick={() =>this.showNote(pt.Prescription)}>Show Note</button></td>
+                <td>{pt.LastUpdatedBy}</td>
+                <td>
+                  <a onClick={() => this.showNote(pt.Prescription)}>
+                    {pt.NoteId}
+                  </a>
+                </td>
                 <td>
                   <button
                     type="button"
@@ -452,8 +455,8 @@ export class PatientData extends Component {
           </div>
         </div>
         <span>Total Patient records are {Patient.length}</span>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <ReactPaginate
           previousLabel={"previous"}
           nextLabel={"next"}
