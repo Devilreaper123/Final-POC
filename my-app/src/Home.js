@@ -40,11 +40,10 @@ export class Home extends Component {
           });
           console.log(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => swal("An Error occured", {
+          icon: "error",
+        }));
     } catch (error) {
-      swal("An Error occured", {
-        icon: "error",
-      });
       console.log("An Error occured", error);
     }
   };
@@ -70,11 +69,11 @@ export class Home extends Component {
           });
           console.log(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => swal("An Error occured", {
+          icon: "error",
+        }));
     } catch (error) {
-      swal("An Error occured", {
-        icon: "error",
-      });
+      ;
       console.log("An Error occured", error);
     }
   };
