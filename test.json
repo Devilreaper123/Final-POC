@@ -1,0 +1,9 @@
+{
+  "patient_id" : "patient01",
+  "patient_name": "Ronit",
+  "gender": "M ",
+  "dob": "2019-02-02",
+  "hospital_name": "Mayo Memorial",
+  "note_id": "note1",
+  "text": "Admit date: 10/12/1982"
+}

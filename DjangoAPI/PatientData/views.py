@@ -30,16 +30,6 @@ def patientDataApi(req, id=0):
                     return JsonResponse("ADDED SUCCESSFULLY", safe=False)
             except Exception as e:
                 return print("FAILED TO ADD:", e)
-        elif req.method == 'POST':
-            try:
-                patient_data = JSONParser().parse(req)
-                patients_serializer = PatientNewDataSerializer(
-                    data=patient_data)
-                if patients_serializer.is_valid():
-                    patients_serializer.save()
-                    return JsonResponse("ADDED SUCCESSFULLY", safe=False)
-            except Exception as e:
-                return print("FAILED TO ADD:", e)
         elif req.method == 'PUT':
             try:
                 patient_data = JSONParser().parse(req)
@@ -108,7 +98,10 @@ class UploadJsonFileView(generics.CreateAPIView):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             file = serializer.validated_data['file']
-            reader = pd.read_json(file, typ='series',encoding="utf8")
+            
+            reader = pd.read_json(file,typ='series',encoding="utf8")
+            print(reader)
+            print("Readed")
             new_file = PatientData.objects.create(
                 PatientId=reader['patient_id'],
                 PatientName=reader['patient_name'],
@@ -120,6 +113,6 @@ class UploadJsonFileView(generics.CreateAPIView):
                 Prescription=reader['text'],
             )
             new_file.save()
-            return Response({"status": "success"})
+            return JsonResponse("status",safe=False)
         except Exception as e:
             return print("FAILED TO Load .Json file:", e)
