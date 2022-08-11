@@ -25,3 +25,14 @@ form{
     padding: 30px;
     color: aliceblue;
 }
+#json{
+    background-color: lightseagreen;
+}
+
+#csv{
+    background-color: lightskyblue;
+}
+
+input{
+    width: 70px;
+}

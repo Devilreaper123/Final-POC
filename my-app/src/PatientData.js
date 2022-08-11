@@ -313,7 +313,7 @@ export class PatientData extends Component {
                 <td>{pt.LastUpdatedBy}</td>
                 <td>
                   <a onClick={() => this.showNote(pt.Prescription)}>
-                    {pt.NoteId}
+                    <p className="noteId">{pt.NoteId}</p>
                   </a>
                 </td>
                 <td>

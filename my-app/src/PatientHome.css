@@ -2,6 +2,10 @@ span{
     background-color:aquamarine;
     padding: 5px;
 }
-a:hover{
-    background-color: lightgoldenrodyellow;
+.noteId{
+    color: blue;
+    text-decoration: underline;
+}
+p:hover{
+    cursor: pointer;
 }

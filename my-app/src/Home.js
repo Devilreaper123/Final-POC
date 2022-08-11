@@ -82,10 +82,9 @@ export class Home extends Component {
       <div className="App">
         <br />
             <td>
-            <p className="json">For Adding a Medical note for a Single patient</p>
+            <p className="json">Import Medical Note for a Single Patient</p>
             <form onSubmit={this.handleJsonSubmit}>
-              <div  className="p-3 mb-2 bg-success text-white">
-              Only files with a .Json extensions are accepted<br/>
+              <div  id="json" className="p-3 mb-2 text-white">
                   <div className="input-group mb-3">
                     <input
                       type="file"
@@ -95,15 +94,16 @@ export class Home extends Component {
                       onChange={this.handleJsonChange}
                     />
                   </div>
+                  Only file with a .json extensions are accepted<br/>
               </div>
               <input type="submit" />
             </form>
             </td>
             <td>
-            <p className="csv">For Adding a Medical note for Multiple patient</p>
+            <p className="csv">Import Medical Note for Multiple Patient</p>
             <form encType="multipart/form-data" onSubmit={this.handleCsvSubmit}>
-              <div className="p-3 mb-2 bg-primary text-white">
-              Only files with a .Csv extensions are accepted<br/>
+              <div id="csv" className="p-3 mb-2 bg text-white">
+              
                   <div className="input-group mb-3">
                     <input
                       type="file"
@@ -113,6 +113,7 @@ export class Home extends Component {
                       onChange={this.handleCsvChange}
                     />
                   </div>
+                  Only file with a .csv extensions are accepted<br/>
               </div>
               <input type="submit" />
             </form>
