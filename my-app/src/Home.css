@@ -2,7 +2,6 @@ body{
     background-image: url("test.jpg") ;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
 }
 input{
     width: 150px;

@@ -13,7 +13,7 @@ const App = () => {
         <nav className="navbar navbar-expand bg-green navbar-dark">
           <ul className="navbar-nav">
             <li className="nav-item- m-1">
-              <NavLink className="btn btn-light btn-outline-primary" to="/home">
+              <NavLink className="btn btn-light btn-outline-primary" to="">
                 Home
               </NavLink>
             </li>
@@ -28,7 +28,7 @@ const App = () => {
           </ul>
         </nav>
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="" element={<Home />} />
           <Route path="/patientdata" element={<PatientData />} />
         </Routes>
       </div>

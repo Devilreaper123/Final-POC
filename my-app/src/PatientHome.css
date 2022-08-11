@@ -5,9 +5,3 @@ span{
 a:hover{
     background-color: lightgoldenrodyellow;
 }
-body{
-    background-image: url("test.jpg") ;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}

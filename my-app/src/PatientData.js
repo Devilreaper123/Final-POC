@@ -420,8 +420,8 @@ export class PatientData extends Component {
                     </div>
                     <div className="input-group mb-3">
                       <span className="input-group-text">Note Summary</span>
-                      <input
-                        type="text"
+                      <textarea
+                        rows={25}
                         className="form-control"
                         value={Prescription}
                         onChange={this.changePrescription}

@@ -20,4 +20,4 @@ class PatientData(models.Model):
     LastUpdatedTime = models.DateTimeField(auto_now=True, blank=True)
     NoteId = models.CharField(max_length=10)
     NoteDateTime = models.DateTimeField(auto_now_add=True, blank=True)
-    Prescription = models.TextField(max_length=600)
+    Prescription = models.TextField(max_length=1200)

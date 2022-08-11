@@ -1,9 +1,9 @@
 {
-  "patient_id" : "patient01",
+  "patient_id" : "patient001",
   "patient_name": "Ronit",
   "gender": "M ",
   "dob": "2019-02-02",
-  "hospital_name": "Mayo Memorial",
-  "note_id": "note1",
+  "hospital_name": "Wockhardt Super Speciality Hospital",
+  "note_id": "note_1",
   "text": "Admit date: 10/12/1982"
 }
