@@ -9,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 4
     page_size_query_param = 'page_size'
     max_page_size = 40
 
@@ -62,7 +62,7 @@ class UploadCsvFileView(generics.CreateAPIView):
 
     serializer_class = FileUploadSerializer
 
-    def postCsv(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         # The Function populates the database by reading the .CSV file and
         # creating an instance of the Patient by filling the data matching to its
         # corresponding row in the CSV file
@@ -96,7 +96,7 @@ class UploadJsonFileView(generics.CreateAPIView):
 
     serializer_class = FileUploadSerializer
 
-    def postJson(self, request):
+    def post(self, request):
         # The Function populates the database by reading the .Json file and
         # creating an instance of the Patient by filling the data matching to its
         # Keys in the Json file
@@ -124,6 +124,7 @@ class UploadJsonFileView(generics.CreateAPIView):
 class View(generics.ListAPIView):
     serializer_class = PatientNewDataSerializer
     queryset = PatientData.objects.all()
+    pagination_class = StandardResultsSetPagination
     def paginatedPatientDataApi(self, req):
 
         # Patient Data Api : This function is Mainly used for Pagination of the 

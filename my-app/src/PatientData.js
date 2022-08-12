@@ -8,8 +8,6 @@ export class PatientData extends Component {
     super(props);
     this.state = {
       PatientId: "",
-      NextUrl: "",
-      PreviousUrl: "",
       Count: 0,
       PatientName: "",
       Patient: [],
@@ -37,8 +35,6 @@ export class PatientData extends Component {
           this.setState({
             Patient: data.results,
             PatientWithoutFilter: data.results,
-            PreviousUrl: data.previous,
-            NextUrl: data.next,
             Count: data.count,
           });
         },
@@ -182,6 +178,24 @@ export class PatientData extends Component {
 
     this.setState({ Patient: sortedData });
   }
+  handlePageClick =(event)=>{
+  let page = event.selected+1
+  console.log(page)
+  fetch(variables.PAGINATED_URL + page)
+      .then((response) => response.json())
+      .then(
+        (data) => {
+          this.setState({
+            Patient: data.results,
+            PatientWithoutFilter: data.results,
+            Count: data.count,
+          });
+        },
+        (err) => {
+          swal("An Error Occured", { icon: "error" });
+        }
+      );
+  }
 
   render() {
     const {
@@ -195,7 +209,6 @@ export class PatientData extends Component {
       Prescription,
       Count,
     } = this.state;
-
     return (
       <div className="main">
         <table className="table table-success table-striped">
@@ -455,15 +468,17 @@ export class PatientData extends Component {
         </div>
         <span>Number of Patient records on this Page are {Patient.length}</span>
         <br />
+        <br />
         <span>Total Number of Patient records are {Count}</span>
         <br />
         <br />
         <ReactPaginate
           previousLabel={"previous"}
           nextLabel={"next"}
-          pageCount={10}
+          pageCount={Count/4}
           breakLabel={"..."}
           marginPagesDisplayed={3}
+          onPageChange={this.handlePageClick}
           containerClassName={"pagination justify-content-center"}
           pageClassName={"page-item"}
           pageLinkClassName={"page-link"}
