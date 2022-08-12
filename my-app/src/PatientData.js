@@ -24,7 +24,7 @@ export class PatientData extends Component {
       PatientWithoutFilter: [],
     };
   }
-  // Default function :
+  // Default function for component loading 
   componentDidMount() {
     this.refreshList();
   }
