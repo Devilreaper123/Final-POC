@@ -11,10 +11,3 @@ class PatientNewDataSerializer(serializers.ModelSerializer):
 
 class FileUploadSerializer(serializers.Serializer):
     file = serializers.FileField()
-
-
-class SaveFileSerializer(serializers.Serializer):
-    # Serializer class to Make the incoming data comprehensible by python
-    class Meta:
-        model = PatientData
-        fields = "__all__"

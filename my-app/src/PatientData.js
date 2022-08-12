@@ -8,6 +8,9 @@ export class PatientData extends Component {
     super(props);
     this.state = {
       PatientId: "",
+      NextUrl: "",
+      PreviousUrl: "",
+      Count: 0,
       PatientName: "",
       Patient: [],
       MRN: 0,
@@ -23,92 +26,26 @@ export class PatientData extends Component {
       PatientWithoutFilter: [],
     };
   }
-  FilterFn() {
-    var MRNFilter = this.state.MRNFilter;
-    var PatientNameFilter = this.state.PatientNameFilter;
-    var filteredData = this.state.PatientWithoutFilter.filter(function(el) {
-      return (
-        el.MRN.toString()
-          .toLowerCase()
-          .includes(
-            MRNFilter.toString()
-              .trim()
-              .toLowerCase()
-          ) &&
-        el.PatientName.toString()
-          .toLowerCase()
-          .includes(
-            PatientNameFilter.toString()
-              .trim()
-              .toLowerCase()
-          )
-      );
-    });
-    this.setState({ Patient: filteredData });
-  }
-  sortResult(prop, asc) {
-    var sortedData = this.state.PatientWithoutFilter.sort(function(a, b) {
-      if (asc) {
-        return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
-      } else {
-        return b[prop] > a[prop] ? 1 : b[prop] < a[prop] ? -1 : 0;
-      }
-    });
-
-    this.setState({ Patient: sortedData });
-  }
-  showNote(pt) {
-    swal(`${pt}`, { icon: "info" });
-  }
-  refreshList() {
-    fetch(variables.API_URL + "patientnewdata")
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ Patient: data, PatientWithoutFilter: data });
-      });
-  }
   componentDidMount() {
     this.refreshList();
   }
-  changeMRNFilter = (e) => {
-    this.state.MRNFilter = e.target.value;
-    this.FilterFn();
-  };
-  changePatientNameFilter = (e) => {
-    this.state.PatientNameFilter = e.target.value;
-    this.FilterFn();
-  };
-  changePatientName = (e) => {
-    this.setState({ PatientName: e.target.value });
-  };
-  changeGender = (e) => {
-    this.setState({ Gender: e.target.value });
-  };
-  changeDOB = (e) => {
-    this.setState({ DOB: e.target.value });
-  };
-  changeHospitalName = (e) => {
-    this.setState({ HospitalName: e.target.value });
-  };
-  changePrescription = (e) => {
-    this.setState({ Prescription: e.target.value });
-  };
-  changeLastUpdatedBy = (e) => {
-    this.setState({ LastUpdatedBy: e.target.value });
-  };
-  addClick() {
-    this.setState({
-      modalTitle: "Add Patient Data",
-      PatientId: 0,
-      PatientName: "",
-      MRN: "",
-      Gender: "",
-      DOB: "",
-      HospitalName: "",
-      LastUpdatedBy: "",
-      NoteId: "",
-      Prescription: "",
-    });
+  refreshList() {
+    fetch(variables.RETRIVE_URL)
+      .then((response) => response.json())
+      .then(
+        (data) => {
+          this.setState({
+            Patient: data.results,
+            PatientWithoutFilter: data.results,
+            PreviousUrl: data.previous,
+            NextUrl: data.next,
+            Count: data.count,
+          });
+        },
+        (err) => {
+          swal("An Error Occured", { icon: "error" });
+        }
+      );
   }
   editClick(pt) {
     this.setState({
@@ -152,15 +89,16 @@ export class PatientData extends Component {
           this.refreshList();
         },
         (error) => {
-          swal("The Patient's Medical record was Edited", { icon: "error" });
+          swal("The Patient's Medical record was not Edited", {
+            icon: "error",
+          });
         }
       );
   }
   deleteClick(id) {
     swal({
       title: "Are you sure you want to delete this Patient's Data??",
-      text:
-        "Once deleted, you will not be able to recover this Patients Medical Note!",
+      text: "Once deleted, you will not be able to recover this Patients Medical Note!",
       icon: "warning",
       buttons: true,
       dangerMode: true,
@@ -172,22 +110,79 @@ export class PatientData extends Component {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-        });
-        swal(
-          "The Patient's Medical Note has been Deleted Successfully!!!. Please Refresh the Page to see the Changes.",
-          {
-            icon: "success",
+        }).then(
+          swal(
+            "The Patient's Medical Note has been Deleted Successfully!!!. Please Refresh the Page to see the Changes.",
+            {
+              icon: "success",
+            }
+          ),
+          (error) => {
+            swal("The Patient's Medical record was not Deleted", {
+              icon: "error",
+            });
           }
         );
-        this.refreshList();
-      } else {
-        swal("The Patient's Medical record was not deleted", { icon: "error" });
       }
+      this.refreshList();
     });
   }
-  subSetArray(i) {
-    console.log(i.selected);
+  showNote(pt) {
+    swal(`${pt}`, { icon: "info" });
   }
+  changePatientName = (e) => {
+    this.setState({ PatientName: e.target.value });
+  };
+  changeGender = (e) => {
+    this.setState({ Gender: e.target.value });
+  };
+  changeDOB = (e) => {
+    this.setState({ DOB: e.target.value });
+  };
+  changeHospitalName = (e) => {
+    this.setState({ HospitalName: e.target.value });
+  };
+  changePrescription = (e) => {
+    this.setState({ Prescription: e.target.value });
+  };
+  changeLastUpdatedBy = (e) => {
+    this.setState({ LastUpdatedBy: e.target.value });
+  };
+  changeMRNFilter = (e) => {
+    this.state.MRNFilter = e.target.value;
+    this.FilterFn();
+  };
+  changePatientNameFilter = (e) => {
+    this.state.PatientNameFilter = e.target.value;
+    this.FilterFn();
+  };
+  FilterFn() {
+    var MRNFilter = this.state.MRNFilter;
+    var PatientNameFilter = this.state.PatientNameFilter;
+    var filteredData = this.state.PatientWithoutFilter.filter(function (el) {
+      return (
+        el.MRN.toString()
+          .toLowerCase()
+          .includes(MRNFilter.toString().trim().toLowerCase()) &&
+        el.PatientName.toString()
+          .toLowerCase()
+          .includes(PatientNameFilter.toString().trim().toLowerCase())
+      );
+    });
+    this.setState({ Patient: filteredData });
+  }
+  sortResult(prop, asc) {
+    var sortedData = this.state.PatientWithoutFilter.sort(function (a, b) {
+      if (asc) {
+        return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
+      } else {
+        return b[prop] > a[prop] ? 1 : b[prop] < a[prop] ? -1 : 0;
+      }
+    });
+
+    this.setState({ Patient: sortedData });
+  }
+
   render() {
     const {
       PatientId,
@@ -198,6 +193,7 @@ export class PatientData extends Component {
       DOB,
       HospitalName,
       Prescription,
+      Count,
     } = this.state;
 
     return (
@@ -361,7 +357,6 @@ export class PatientData extends Component {
             ))}
           </tbody>
         </table>
-
         <div
           className="modal fade"
           id="exampleModal"
@@ -458,7 +453,9 @@ export class PatientData extends Component {
             </div>
           </div>
         </div>
-        <span>Total Patient records are {Patient.length}</span>
+        <span>Number of Patient records on this Page are {Patient.length}</span>
+        <br />
+        <span>Total Number of Patient records are {Count}</span>
         <br />
         <br />
         <ReactPaginate
@@ -475,7 +472,6 @@ export class PatientData extends Component {
           nextClassName={"page-item"}
           nextLinkClassName={"page-link"}
           breakClassName={"page-item"}
-          onClick={this.subSetArray}
           breakLinkClassName={"page-link"}
           activeClassName={"active"}
         />

@@ -17,7 +17,9 @@ class PatientData(models.Model):
     DOB = models.DateField()
     HospitalName = models.CharField(max_length=200)
     LastUpdatedBy = models.CharField(max_length=120)
-    LastUpdatedTime = models.DateTimeField(auto_now=True, blank=True)
+    LastUpdatedTime = models.DateTimeField(auto_now=True)
     NoteId = models.CharField(max_length=10)
-    NoteDateTime = models.DateTimeField(auto_now_add=True, blank=True)
+    NoteDateTime = models.DateTimeField(auto_now_add=True)
     Prescription = models.TextField(max_length=1200)
+    class Meta:
+        ordering = ['MRN']
