@@ -178,10 +178,10 @@ export class PatientData extends Component {
 
     this.setState({ Patient: sortedData });
   }
-  handlePageClick =(event)=>{
-  let page = event.selected+1
-  console.log(page)
-  fetch(variables.PAGINATED_URL + page)
+  handlePageClick = (event) => {
+    let page = event.selected + 1;
+    console.log(page);
+    fetch(variables.PAGINATED_URL + page)
       .then((response) => response.json())
       .then(
         (data) => {
@@ -195,7 +195,7 @@ export class PatientData extends Component {
           swal("An Error Occured", { icon: "error" });
         }
       );
-  }
+  };
 
   render() {
     const {
@@ -475,9 +475,9 @@ export class PatientData extends Component {
         <ReactPaginate
           previousLabel={"previous"}
           nextLabel={"next"}
-          pageCount={Count/4}
+          pageCount={Count / 4}
           breakLabel={"..."}
-          marginPagesDisplayed={3}
+          marginPagesDisplayed={5}
           onPageChange={this.handlePageClick}
           containerClassName={"pagination justify-content-center"}
           pageClassName={"page-item"}

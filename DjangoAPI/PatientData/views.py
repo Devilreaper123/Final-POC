@@ -125,9 +125,10 @@ class View(generics.ListAPIView):
     serializer_class = PatientNewDataSerializer
     queryset = PatientData.objects.all()
     pagination_class = StandardResultsSetPagination
+
     def paginatedPatientDataApi(self, req):
 
-        # Patient Data Api : This function is Mainly used for Pagination of the 
+        # Patient Data Api : This function is Mainly used for Pagination of the
         # data from backend so that the frontend can consume the paginated data easily
         try:
             if req.method == 'GET':
