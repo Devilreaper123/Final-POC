@@ -24,9 +24,11 @@ export class PatientData extends Component {
       PatientWithoutFilter: [],
     };
   }
+  // Default function :
   componentDidMount() {
     this.refreshList();
   }
+  // This function is used to fetch the refreshed data after performing some operations
   refreshList() {
     fetch(variables.RETRIVE_URL)
       .then((response) => response.json())
@@ -43,6 +45,7 @@ export class PatientData extends Component {
         }
       );
   }
+  // This function is used to edit some of the fields
   editClick(pt) {
     this.setState({
       modalTitle: "Edit Patient Data",
@@ -57,6 +60,7 @@ export class PatientData extends Component {
       Prescription: pt.Prescription,
     });
   }
+  // This function is used to send the updated data back to API (DataBase)
   updateClick() {
     fetch(variables.API_URL + "patientnewdata", {
       method: "PUT",
@@ -91,6 +95,7 @@ export class PatientData extends Component {
         }
       );
   }
+  // This function is used to delete a medical note from the database using API Call
   deleteClick(id) {
     swal({
       title: "Are you sure you want to delete this Patient's Data??",
@@ -123,35 +128,41 @@ export class PatientData extends Component {
       this.refreshList();
     });
   }
+  // This function Used to show the Note summary associated with the note ID
   showNote(pt) {
     swal(`${pt}`, { icon: "info" });
   }
+  // This function is used to change the Patient Name as per the needs
   changePatientName = (e) => {
     this.setState({ PatientName: e.target.value });
   };
+  // This function is used to change the Gender as per the modal needs
   changeGender = (e) => {
     this.setState({ Gender: e.target.value });
   };
+  // This function is used to change the DOB as per the needs
   changeDOB = (e) => {
     this.setState({ DOB: e.target.value });
   };
+  // This function is used to change the Hospital Name as per the need
   changeHospitalName = (e) => {
     this.setState({ HospitalName: e.target.value });
   };
+  // This function is used to change the Prescription/Medical Note as per the need
   changePrescription = (e) => {
     this.setState({ Prescription: e.target.value });
   };
-  changeLastUpdatedBy = (e) => {
-    this.setState({ LastUpdatedBy: e.target.value });
-  };
+  // This function is used to change the MRN Filter and call the Filter Function
   changeMRNFilter = (e) => {
     this.state.MRNFilter = e.target.value;
     this.FilterFn();
   };
+  // This function is used to change the Patient Name Filter and call the Filter Function
   changePatientNameFilter = (e) => {
     this.state.PatientNameFilter = e.target.value;
     this.FilterFn();
   };
+  // This function is used to filter the MRN and the Patient name field as per the entered content
   FilterFn() {
     var MRNFilter = this.state.MRNFilter;
     var PatientNameFilter = this.state.PatientNameFilter;
@@ -167,6 +178,7 @@ export class PatientData extends Component {
     });
     this.setState({ Patient: filteredData });
   }
+  // This function is used to sort the MRN and the Patient Name in accending or descending order as per the need
   sortResult(prop, asc) {
     var sortedData = this.state.PatientWithoutFilter.sort(function (a, b) {
       if (asc) {
@@ -178,6 +190,7 @@ export class PatientData extends Component {
 
     this.setState({ Patient: sortedData });
   }
+  // This function is used to handle the page change from the frontend and fetching the appropiate result from API
   handlePageClick = (event) => {
     let page = event.selected + 1;
     console.log(page);

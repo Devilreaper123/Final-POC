@@ -9,6 +9,10 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class StandardResultsSetPagination(PageNumberPagination):
+
+    # This class is used a the default class for Pagination of the
+    # Data from the database so that we can directly send a paginated data
+
     page_size = 4
     page_size_query_param = 'page_size'
     max_page_size = 40
@@ -128,7 +132,7 @@ class View(generics.ListAPIView):
 
     def paginatedPatientDataApi(self, req):
 
-        # Patient Data Api : This function is Mainly used for Pagination of the
+        # This function is Mainly used for Pagination of the
         # data from backend so that the frontend can consume the paginated data easily
         try:
             if req.method == 'GET':
