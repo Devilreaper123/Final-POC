@@ -1,6 +1,6 @@
 from django.urls import re_path, path
 from . import views
-from .views import UploadCsvFileView,UploadJsonFileView
+from .views import UploadCsvFileView,UploadJsonFileView,View
 urlpatterns = [
     # for GET,POST Method
     re_path(r'^patientnewdata$', views.patientDataApi),
@@ -9,5 +9,7 @@ urlpatterns = [
     # for uploading the csv file
     path('uploadcsv/', UploadCsvFileView.as_view(), name='upload-csv'),
     # for Uploading the Json file
-    path('uploadjson/', UploadJsonFileView.as_view(), name='upload-json')
+    path('uploadjson/', UploadJsonFileView.as_view(), name='upload-json'),
+    #list view for paginations
+    re_path(r'^list/$', View.as_view()),    
 ]
